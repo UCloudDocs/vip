@@ -73,7 +73,7 @@ NAME         UUID                                  TYPE      DEVICE
 System eth0  5fb06bd0-0bb0-7ffb-45f1-d6edd65f3e03  ethernet  eth0 
 ```
 
-获取当前的主机的名字为：System eth0
+获取当前的网络连接名字为：System eth0
 
 2、增加IP
 
