@@ -22,7 +22,9 @@
 
 **注意：一个VIP只能绑定在一台云主机/物理云主机上，否则可能会引发ARP信息的不一致。**
 
-### CentOS系统实现方法一：固化配置，将内网虚拟IP写入ifcfg配置文件
+### CentOS系统实现方法一：
+
+#### 固化配置，将内网虚拟IP写入ifcfg配置文件（针对CentOS7及其更低版本有效）
 
 1、  复制一份ifcfg-eth0配置文件，命名为ifcfg-eth0:0，命令如下
 ```
@@ -54,6 +56,37 @@
 
 - 重启网络后，使用 ip a 命令检查内网虚拟IP是否添加成功。
 - 内网虚拟IP仅可写入ifcfg-eth0:0配置文件，不可将ifcfg-eth0配置文件中的IPADDR修改为内网虚拟IP。如果错误修改了ifcfg-eth0配置文件，可能会导致云主机的网络中断。
+
+#### 针对CentOS8及更高版本
+
+CentOS8开始全面使用NetworkManager对网络进行管理，因此无法采用上述方式进行网络管理。
+
+1、查看当前连接情况。
+
+```
+nmcli con show
+```
+
+可能的结果如下：
+```
+NAME         UUID                                  TYPE      DEVICE 
+System eth0  5fb06bd0-0bb0-7ffb-45f1-d6edd65f3e03  ethernet  eth0 
+```
+
+获取当前的主机的名字为：System eth0
+
+2、增加IP
+
+```
+nmcli con mod "System eth0" +ipv4.addresses "192.168.0.30/24"
+```
+
+3、加载配置
+
+```
+nmcli con up "System eth0"
+```
+
 
 ### CentOS系统实现方法二：临时添加，使用命令手动添加内网虚拟IP
 
